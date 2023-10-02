@@ -1,0 +1,7 @@
+{
+  "name": "1_paskaita",
+  "version": "0.1",
+  "scripts": {
+    "start": "node index.js"
+  }
+}
