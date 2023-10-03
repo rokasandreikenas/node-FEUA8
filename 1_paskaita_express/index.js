@@ -1,6 +1,10 @@
 const express = require("express"); // importuojam express modulį (nepamirštam įsirašyti)
+const cors = require("cors");
 const app = express(); // sukuriam express aplikaciją
 const port = 3000;
+
+// app.use() - aplikacija pritaikys papildomus parametrus
+app.use(cors()); // cors() - cors nustatymai naudojami appse
 
 const users = ["Alex", "Rose", "Megan"];
 

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Cars List</h1>
+    <script>
+      const renderCarList = (cars) => {
+        const ul = document.createElement("ul");
+        cars.forEach((car) => {
+          const li = document.createElement("li");
+          li.textContent = car;
+          ul.append(li);
+        });
+
+        document.body.append(ul);
+      };
+
+      fetch("http://localhost:3000/")
+        .then((resp) => resp.json())
+        .then((response) => {
+          renderCarList(response);
+        });
+    </script>
+  </body>
+</html>
