@@ -12,3 +12,4 @@ Node introduction
 - 500 Internal Server Error
 - req (request) - tai ką gauname į serverį
 - res (response) - tai ką išsiunčiam iš serverio
+- npm init - sukurti naują node projektą
