@@ -122,6 +122,10 @@ app.put("/pets/:id", async (req, res) => {
     const { id } = req.params;
     const updatingPet = req.body;
 
+    if (updatingPet.ownerId) {
+      updatingPet.ownerId = new ObjectId(updatingPet.ownerId);
+    }
+
     const filter = { _id: new ObjectId(id) }; // filtras kur sutinka id
     const updateDoc = { $set: updatingPet }; // atnaujintas elementas
 
@@ -131,6 +135,43 @@ app.put("/pets/:id", async (req, res) => {
       .collection("pets")
       .updateOne(filter, updateDoc);
 
+    await con.close();
+    res.send(data);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error });
+  }
+});
+
+app.post("/owners", async (req, res) => {
+  try {
+    const newOwner = req.body;
+    if (!newOwner.name || !newOwner.phone) {
+      return res.status(400).send({ error: "Missing data" });
+    }
+    const con = await client.connect();
+    const data = await con.db("demo1").collection("people").insertOne(newOwner);
+    await con.close();
+    res.send(data);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error });
+  }
+});
+
+app.post("/pets", async (req, res) => {
+  try {
+    const newPet = req.body;
+    if (!newPet.type || !newPet.name || !newPet.ownerId) {
+      return res.status(400).send({ error: "Missing data" });
+    }
+
+    if (newPet.ownerId) {
+      newPet.ownerId = new ObjectId(newPet.ownerId);
+    }
+
+    const con = await client.connect();
+    const data = await con.db("demo1").collection("pets").insertOne(newPet);
     await con.close();
     res.send(data);
   } catch (error) {
