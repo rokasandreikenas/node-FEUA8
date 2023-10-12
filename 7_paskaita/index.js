@@ -180,6 +180,20 @@ app.post("/pets", async (req, res) => {
   }
 });
 
+app.post("/register", (req, res) => {
+  // POST new user to the database
+  // req.body = {name: "Rokas", surname: "Andreikenas", email: "Rokas@gmail.com", password: "123456"}
+  // hash optional
+});
+
+app.post("/login", (req, res) => {
+  // POST with login values and checking if user exists
+  // req.body = {email: "rokas@gmail.com", "password": "123456"}
+  // check in database if user exists with that email and password
+  // if(exists) return res.send({message: 'success'})
+  // catch { res.status(403).send({message: "authorization failed"})}
+});
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
