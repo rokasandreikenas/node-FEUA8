@@ -24,9 +24,9 @@ app.get("/", async (req, res) => {
       .aggregate([
         {
           $lookup: {
-            from: "pets",
-            localField: "_id",
-            foreignField: "ownerId",
+            from: "pets", // kita kolekcija
+            localField: "_id", // collection("kolekcija") fieldas per kurį jungiam
+            foreignField: "ownerId", // from kolekcijos laukas per kurį jungiam
             as: "gyvunai",
           },
         },
@@ -56,7 +56,7 @@ app.get("/pets", async (req, res) => {
           },
         },
         {
-          $unwind: "$owner",
+          $unwind: "$owner", // grąžina vietoj masyvo objektą, nes masyve tik vienas elementas
         },
       ])
       .toArray();
@@ -93,7 +93,46 @@ app.get("/pets/:id", async (req, res) => {
       ])
       .toArray();
     await con.close();
-    res.send(data[0]);
+    res.send(data[0]); // grazinu tik {} vietoj [{}]
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error });
+  }
+});
+
+app.delete("/pets/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const con = await client.connect();
+    const data = await con
+      .db("demo1")
+      .collection("pets")
+      .deleteOne({ _id: new ObjectId(id) });
+
+    await con.close();
+    res.send(data);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error });
+  }
+});
+
+app.put("/pets/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatingPet = req.body;
+
+    const filter = { _id: new ObjectId(id) }; // filtras kur sutinka id
+    const updateDoc = { $set: updatingPet }; // atnaujintas elementas
+
+    const con = await client.connect();
+    const data = await con
+      .db("demo1")
+      .collection("pets")
+      .updateOne(filter, updateDoc);
+
+    await con.close();
+    res.send(data);
   } catch (error) {
     console.log(error);
     res.status(500).send({ error });

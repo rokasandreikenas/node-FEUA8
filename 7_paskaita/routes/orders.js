@@ -60,7 +60,7 @@ router.get("/toothbrushesCount", async (req, res) => {
   }
 });
 
-// toothbrushes count
+// product count
 router.get("/count/:product", async (req, res) => {
   try {
     const { product } = req.params;
